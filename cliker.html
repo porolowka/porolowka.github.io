@@ -479,7 +479,6 @@
 
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script>
     const firebaseConfig = {
         apiKey: "AIzaSyD28gbARZpoliiXoJc1S_XIdvLWe9YmhjQ",
@@ -493,21 +492,21 @@
     };
 
     let db = null;
-    let currentUser = null;
     let lastCommentTime = 0;
-    const RATE_LIMIT = 10000;
+    const RATE_LIMIT = 5000;
+
+    function getUserId() {
+        let id = localStorage.getItem('comment_user_id');
+        if (!id) {
+            id = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('comment_user_id', id);
+        }
+        return id;
+    }
 
     try {
         firebase.initializeApp(firebaseConfig);
         db = firebase.database();
-        firebase.auth().signInAnonymously().then((user) => {
-            currentUser = user.user;
-        }).catch((e) => {
-            console.error("Auth error:", e);
-        });
-        firebase.auth().onAuthStateChanged((user) => {
-            currentUser = user;
-        });
     } catch(e) {
         console.error("Firebase error:", e);
     }
@@ -583,7 +582,8 @@
         const author = escapeHtml(comment.name || 'Аноним');
         const time = formatTime(comment.timestamp);
         const text = escapeHtml(comment.text || '');
-        const isMine = currentUser && comment.authorId === currentUser.uid;
+        const myId = getUserId();
+        const isMine = comment.authorId === myId;
         const edited = comment.edited ? ' <span class="edited-badge">(изменено)</span>' : '';
 
         let actions = '<button class="reply-btn" onclick="toggleReplyForm(\'' + comment.id + '\')">Ответить</button>';
@@ -635,13 +635,13 @@
             return;
         }
 
-        if (!db || !currentUser) { alert('Подождите, идёт подключение...'); return; }
+        if (!db) { alert('Не удалось подключиться к базе. Обновите страницу.'); return; }
 
         db.ref('comments').push({
             name: name,
             text: text,
             timestamp: now,
-            authorId: currentUser.uid,
+            authorId: getUserId(),
             edited: false
         });
 
@@ -665,13 +665,13 @@
             return;
         }
 
-        if (!db || !currentUser) { alert('Подождите, идёт подключение...'); return; }
+        if (!db) { alert('Не удалось подключиться к базе. Обновите страницу.'); return; }
 
         db.ref('comments').push({
             name: name,
             text: text,
             timestamp: now,
-            authorId: currentUser.uid,
+            authorId: getUserId(),
             parentId: parentId,
             edited: false
         });
@@ -684,7 +684,7 @@
         const newText = document.getElementById('edit-text-' + commentId).value.trim();
         if (!newText) { alert('Текст не может быть пустым'); return; }
 
-        if (!db || !currentUser) { alert('Подождите, идёт подключение...'); return; }
+        if (!db) { alert('Не удалось подключиться к базе. Обновите страницу.'); return; }
 
         db.ref('comments/' + commentId).update({
             text: newText,
@@ -696,7 +696,7 @@
 
     function deleteComment(commentId) {
         if (!confirm('Удалить комментарий?')) return;
-        if (!db || !currentUser) { alert('Подождите, идёт подключение...'); return; }
+        if (!db) { alert('Не удалось подключиться к базе. Обновите страницу.'); return; }
 
         db.ref('comments/' + commentId).remove();
         db.ref('comments').orderByChild('parentId').equalTo(commentId).once('value', (snap) => {
