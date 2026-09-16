@@ -25,30 +25,35 @@
             font-size: 16px;
         }
         .nav a:hover { color: #FFC700; }
-        .hero {
+
+        .cover {
             text-align: center;
-            padding: 50px 20px;
-            background: linear-gradient(180deg, #1e1e1e 0%, #2a2a2a 100%);
+            background: linear-gradient(180deg, #1a1a1a 0%, #2a2a2a 100%);
+            padding: 40px 20px;
         }
-        .hero h1 {
+        .cover img {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 12px;
+            border: 3px solid #333;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .cover h1 {
             font-size: 56px;
             color: #FFD700;
             margin: 0 0 15px;
         }
-        .hero p {
+        .cover p {
             font-size: 18px;
             color: #999;
             max-width: 600px;
-            margin: 0 auto 30px;
+            margin: 0 auto 20px;
             line-height: 1.6;
         }
-        .hero-img {
-            width: 100%;
-            max-width: 700px;
-            border-radius: 12px;
-            border: 3px solid #333;
-            margin: 20px auto;
-            display: block;
+        .genres {
+            text-align: center;
+            padding: 0 20px 20px;
         }
         .genre {
             display: inline-block;
@@ -73,6 +78,63 @@
         .section p {
             line-height: 1.7;
             color: #ccc;
+        }
+        .screenshots {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 20px 40px;
+        }
+        .screenshots h2 {
+            color: #FFD700;
+            font-size: 28px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+        .screenshot-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .screenshot-empty {
+            width: 250px;
+            height: 150px;
+            background: #2a2a2a;
+            border: 2px dashed #444;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-style: italic;
+            font-size: 13px;
+            text-align: center;
+        }
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+        .feature {
+            background: #2a2a2a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px 20px;
+            flex: 1;
+            min-width: 200px;
+        }
+        .feature h3 {
+            color: #FFD700;
+            margin: 0 0 5px;
+            font-size: 16px;
+        }
+        .feature p {
+            margin: 0;
+            color: #999;
+            font-size: 13px;
         }
         .versions {
             max-width: 800px;
@@ -130,32 +192,6 @@
             font-style: italic;
             padding: 40px;
         }
-        .features {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 20px 40px;
-        }
-        .feature {
-            background: #2a2a2a;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 15px 20px;
-            flex: 1;
-            min-width: 200px;
-        }
-        .feature h3 {
-            color: #FFD700;
-            margin: 0 0 5px;
-            font-size: 16px;
-        }
-        .feature p {
-            margin: 0;
-            color: #999;
-            font-size: 13px;
-        }
         footer {
             text-align: center;
             padding: 20px;
@@ -169,17 +205,31 @@
         <a href="index.html">← Все игры</a>
     </div>
 
-    <div class="hero">
+    <div class="cover">
+        <img src="cliker-cover.png" alt="Кликер">
         <h1>Кликер</h1>
         <p>Кликай, зарабатывай очки, прокачивай улучшения, играй в мини-игру с кроликом и морковками. Инструктор поможет освоиться!</p>
-        <div>
-            <span class="genre">Кликер</span>
-            <span class="genre">Одиночная</span>
-            <span class="genre">Казуальная</span>
-        </div>
     </div>
 
-    <img class="hero-img" src="cliker-screenshot.png" alt="Скриншот игры">
+    <div class="genres">
+        <span class="genre">Кликер</span>
+        <span class="genre">Одиночная</span>
+        <span class="genre">Казуальная</span>
+    </div>
+
+    <div class="section">
+        <h2>Об игре</h2>
+        <p>Кликер — это игра, где ты зарабатываешь очки кликами. Покупай улучшения в магазине, запускай автокликер, чтобы очки копились сами, и развлекайся в мини-игре, где кролик скачет за морковками. Жёлтый инструктор в углу экрана подскажет, что делать.</p>
+    </div>
+
+    <div class="screenshots">
+        <h2>Скриншоты</h2>
+        <div class="screenshot-row">
+            <div class="screenshot-empty">Скриншот 1<br>(скоро)</div>
+            <div class="screenshot-empty">Скриншот 2<br>(скоро)</div>
+            <div class="screenshot-empty">Скриншот 3<br>(скоро)</div>
+        </div>
+    </div>
 
     <div class="features">
         <div class="feature">
@@ -188,45 +238,42 @@
         </div>
         <div class="feature">
             <h3>Автокликер</h3>
-            <p>Купи автокликер — и очки зарабатываются сами, даже когда ты не кликаешь.</p>
+            <p>Купи автокликер — и очки зарабатываются сами.</p>
         </div>
         <div class="feature">
             <h3>Мини-игра</h3>
-            <p>Устал кликать? Запусти мини-игру — беги кроликом и собирай морковки!</p>
+            <p>Беги кроликом и собирай морковки!</p>
         </div>
         <div class="feature">
             <h3>Инструктор</h3>
-            <p>Жёлтый помощник в углу экрана объяснит каждую кнопку. Наведи курсор — он подскажет.</p>
+            <p>Жёлтый помощник объяснит каждую кнопку.</p>
         </div>
         <div class="feature">
-            <h3>4 уровня сложности</h3>
-            <p>Лёгкий, сложный, божественный лёгкий и божественный сложный.</p>
+            <h3>3 уровня сложности</h3>
+            <p>Лёгкий, сложный и творческий режим с бесконечными очками.</p>
         </div>
         <div class="feature">
             <h3>3 слота сохранения</h3>
-            <p>Играй в три разных сохранения одновременно. Удаляй и начинай заново.</p>
+            <p>Играй в три разных сохранения одновременно.</p>
         </div>
     </div>
 
     <div class="versions">
         <h2>Версии</h2>
-
-        <!-- Когда появится версия, скопируй этот блок и поменяй данные:
+        <p class="empty">Пока нет доступных версий для скачивания.</p>
+        <!-- Когда появится версия, добавь блок:
         <div class="version-item">
             <div class="version-info">
                 <h3><span class="version-badge">Alpha</span> 0.1 — Ранний доступ</h3>
                 <p>Первая версия. Кликер, магазин, мини-игра, инструктор.</p>
             </div>
-            <a href="файл.zip" class="download-btn" download>Скачать</a>
+            <a href="cliker-0.1-alpha.zip" class="download-btn" download>Скачать</a>
         </div>
         -->
-
-        <div class="empty">Пока нет доступных версий. Загрузка появится скоро!</div>
     </div>
 
     <footer>
-        &copy; 2026 Poroloshka. Все права защищены.<br>
-        <a href="index.html" style="color:#555;">← Назад к играм</a>
+        Poroloshka © 2026
     </footer>
 </body>
 </html>
