@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poroloshka — Игры</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #1e1e1e;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            padding: 60px 20px 30px;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 48px;
+            margin: 0 0 10px;
+            color: #FFD700;
+        }
+        header p {
+            font-size: 18px;
+            color: #999;
+            margin: 0;
+        }
+        .games {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            padding: 40px 20px 60px;
+            max-width: 900px;
+        }
+        .game-card {
+            background: #2a2a2a;
+            border: 2px solid #333;
+            border-radius: 12px;
+            padding: 30px;
+            width: 260px;
+            text-align: center;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .game-card:hover {
+            transform: translateY(-5px);
+            border-color: #FFD700;
+        }
+        .game-card h2 {
+            color: #FFD700;
+            font-size: 24px;
+            margin: 0 0 10px;
+        }
+        .game-card p {
+            color: #999;
+            font-size: 14px;
+            margin: 0 0 20px;
+            line-height: 1.5;
+        }
+        .game-card .btn {
+            display: inline-block;
+            background: #FFD700;
+            color: #1e1e1e;
+            text-decoration: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 15px;
+            transition: background 0.2s;
+        }
+        .game-card .btn:hover {
+            background: #FFC700;
+        }
+        .badge {
+            display: inline-block;
+            background: #4a6d4a;
+            color: #fff;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            text-align: center;
+            color: #555;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Poroloshka</h1>
+        <p>Мои игры — скачай и играй!</p>
+    </header>
+
+    <div class="games">
+        <div class="game-card">
+            <span class="badge">Бесплатно</span>
+            <h2>Кликер</h2>
+            <p>Кликай, зарабатывай очки, покупай улучшения, играй в мини-игру. Есть инструктор, который всё объяснит.</p>
+            <a href="cliker.html" class="btn">Скачать</a>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Poroloshka. Все права защищены.
+    </footer>
+</body>
+</html>
