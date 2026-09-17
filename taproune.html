@@ -357,6 +357,7 @@
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
+            align-items: center;
         }
         .reply-btn, .edit-btn, .delete-btn {
             background: none;
@@ -370,6 +371,34 @@
         .reply-btn:hover { border-color: #FFD700; color: #FFD700; }
         .edit-btn:hover { border-color: #4a90d9; color: #4a90d9; }
         .delete-btn:hover { border-color: #d94a4a; color: #d94a4a; }
+        .toggle-replies-btn {
+            background: none;
+            border: 1px solid #444;
+            color: #999;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .toggle-replies-btn:hover {
+            border-color: #FFD700;
+            color: #FFD700;
+        }
+        .toggle-arrow {
+            font-size: 10px;
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+        .toggle-arrow.open {
+            transform: rotate(90deg);
+        }
+        .toggle-count {
+            color: #666;
+            font-size: 11px;
+        }
         .reply-form {
             background: #1e1e1e;
             border: 1px solid #444;
@@ -389,6 +418,9 @@
             border-left: 2px solid #333;
             padding-left: 10px;
             margin-top: 8px;
+        }
+        .replies.collapsed {
+            display: none;
         }
         .edited-badge {
             color: #555;
@@ -653,13 +685,28 @@
             byParent[pid].push({ id, ...c });
         });
 
+        // Закреплённые ответы
         const pinnedReplies = byParent['pinned'] || [];
         pinnedReplies.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
         const pinnedContainer = document.getElementById('pinnedReplies');
         pinnedContainer.innerHTML = '';
-        pinnedReplies.forEach(c => {
-            pinnedContainer.appendChild(renderComment(c, byParent, 1));
-        });
+
+        if (pinnedReplies.length > 0) {
+            var toggle = document.createElement('button');
+            toggle.className = 'toggle-replies-btn';
+            toggle.id = 'toggle-pinned-replies';
+            toggle.innerHTML = '<span class="toggle-arrow">&#9654;</span> Ответы (' + pinnedReplies.length + ')';
+            toggle.onclick = function() { toggleReplies('pinned-replies', this); };
+            pinnedContainer.appendChild(toggle);
+
+            var wrap = document.createElement('div');
+            wrap.id = 'pinned-replies';
+            wrap.className = 'replies collapsed';
+            pinnedReplies.forEach(c => {
+                wrap.appendChild(renderComment(c, byParent, 1));
+            });
+            pinnedContainer.appendChild(wrap);
+        }
 
         const list = document.getElementById('commentsList');
         list.innerHTML = '';
@@ -696,13 +743,24 @@
             actions += '<button class="delete-btn" onclick="deleteComment(\'' + comment.id + '\')">Удалить</button>';
         }
 
+        // Проверяем, есть ли ответы
+        const replies = byParent[comment.id] || [];
+        replies.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+
+        let toggleBtn = '';
+        if (replies.length > 0) {
+            toggleBtn = '<button class="toggle-replies-btn" onclick="toggleReplies(\'replies-' + comment.id + '\', this)">' +
+                '<span class="toggle-arrow">&#9654;</span> Ответы (' + replies.length + ')' +
+                '</button>';
+        }
+
         div.innerHTML =
             '<div class="comment-header">' +
                 '<span class="comment-author">' + author + '</span>' +
                 '<span class="comment-time">' + time + edited + '</span>' +
             '</div>' +
             '<div class="comment-text" id="comment-text-' + comment.id + '">' + text + '</div>' +
-            '<div class="comment-actions">' + actions + '</div>' +
+            '<div class="comment-actions">' + actions + toggleBtn + '</div>' +
             '<div class="reply-form" id="reply-form-' + comment.id + '" style="display:none;">' +
                 '<input type="text" placeholder="Ваше имя" id="reply-name-' + comment.id + '" maxlength="30">' +
                 '<textarea placeholder="Ваш ответ..." id="reply-text-' + comment.id + '" rows="2" maxlength="500"></textarea>' +
@@ -714,16 +772,27 @@
                 '<button class="save-btn" onclick="editComment(\'' + comment.id + '\')">Сохранить</button>' +
                 '<button class="cancel-btn" onclick="toggleEditForm(\'' + comment.id + '\')">Отмена</button>' +
             '</div>' +
-            '<div class="replies" id="replies-' + comment.id + '"></div>';
+            '<div class="replies collapsed" id="replies-' + comment.id + '"></div>';
 
-        const replies = byParent[comment.id] || [];
-        replies.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
         const repliesContainer = div.querySelector('#replies-' + comment.id);
         replies.forEach(r => {
             repliesContainer.appendChild(renderComment(r, byParent, depth + 1));
         });
 
         return div;
+    }
+
+    function toggleReplies(containerId, btn) {
+        var container = document.getElementById(containerId);
+        if (!container) return;
+        var arrow = btn.querySelector('.toggle-arrow');
+        if (container.classList.contains('collapsed')) {
+            container.classList.remove('collapsed');
+            if (arrow) arrow.classList.add('open');
+        } else {
+            container.classList.add('collapsed');
+            if (arrow) arrow.classList.remove('open');
+        }
     }
 
     function submitComment() {
