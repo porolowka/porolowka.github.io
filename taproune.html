@@ -413,6 +413,36 @@
     <!-- Unauthorized copying is prohibited. Author: Poroloshka. All rights reserved. -->
     <div style="display:none" data-author="porolowka" data-source="original" data-date="2026-09-17"></div>
 
+    <script>
+    // ===== ЗАЩИТА ОТ КОПИРОВАНИЯ =====
+    (function() {
+        var allowedHosts = ['porolowka.github.io', 'localhost', '127.0.0.1'];
+        var currentHost = window.location.hostname;
+
+        var isAllowed = false;
+        for (var i = 0; i < allowedHosts.length; i++) {
+            if (currentHost === allowedHosts[i] || currentHost.endsWith('.' + allowedHosts[i])) {
+                isAllowed = true;
+                break;
+            }
+        }
+
+        if (!isAllowed) {
+            document.body.innerHTML =
+                '<div class="stolen-overlay">' +
+                    '<div class="stolen-content">' +
+                        '<h1>&#9888; Этот сайт украден</h1>' +
+                        '<p>Данная страница является нелегальной копией оригинального сайта.</p>' +
+                        '<p>Оригинал находится по адресу:</p>' +
+                        '<p><a href="https://porolowka.github.io/taproune.html">porolowka.github.io</a></p>' +
+                        '<p style="margin-top: 30px; font-size: 14px;">&copy; Poroloshka, 2026. Все права защищены.</p>' +
+                    '</div>' +
+                '</div>';
+            throw new Error('Unauthorized domain. This content is stolen.');
+        }
+    })();
+    </script>
+
     <div class="nav">
         <a href="index.html">&larr; Все игры</a>
     </div>
@@ -477,7 +507,10 @@
                 <h3><span class="version-badge alpha">Alpha</span> v0.1 — Ранний доступ</h3>
                 <p>Первая публичная версия. Скачайте, распакуйте и запускайте taproune.exe.</p>
             </div>
-            <a href="https://github.com/porolowka/porolowka.github.io/raw/main/v0.1-alpha-rd" class="download-btn">Скачать</a>
+            <div>
+                <a href="https://github.com/porolowka/porolowka.github.io/raw/main/v0.1-alpha-rd" class="download-btn" onclick="trackDownload()">Скачать</a>
+                <span id="downloadCount" style="display:block;color:#666;font-size:12px;margin-top:8px;text-align:center;"></span>
+            </div>
         </div>
     </div>
 
@@ -511,36 +544,6 @@
     <footer>
         Poroloshka &copy; 2026
     </footer>
-
-    <script>
-    // ===== ЗАЩИТА ОТ КОПИРОВАНИЯ =====
-    (function() {
-        var allowedHosts = ['porolowka.github.io', 'localhost', '127.0.0.1'];
-        var currentHost = window.location.hostname;
-
-        var isAllowed = false;
-        for (var i = 0; i < allowedHosts.length; i++) {
-            if (currentHost === allowedHosts[i] || currentHost.endsWith('.' + allowedHosts[i])) {
-                isAllowed = true;
-                break;
-            }
-        }
-
-        if (!isAllowed) {
-            document.body.innerHTML =
-                '<div class="stolen-overlay">' +
-                    '<div class="stolen-content">' +
-                        '<h1>&#9888; Этот сайт украден</h1>' +
-                        '<p>Данная страница является нелегальной копией оригинального сайта.</p>' +
-                        '<p>Оригинал находится по адресу:</p>' +
-                        '<p><a href="https://porolowka.github.io/taproune.html">porolowka.github.io</a></p>' +
-                        '<p style="margin-top: 30px; font-size: 14px;">&copy; Poroloshka, 2026. Все права защищены.</p>' +
-                    '</div>' +
-                '</div>';
-            throw new Error('Unauthorized domain. This content is stolen.');
-        }
-    })();
-    </script>
 
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
@@ -594,6 +597,42 @@
         return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
     }
 
+    // ===== СЧЁТЧИК УНИКАЛЬНЫХ СКАЧИВАНИЙ =====
+    function trackDownload() {
+        var userId = getUserId();
+        var downloaded = localStorage.getItem('downloaded_taproune');
+        if (!downloaded && db) {
+            db.ref('downloads/taproune/' + userId).set(true);
+            localStorage.setItem('downloaded_taproune', '1');
+        }
+    }
+
+    function loadDownloadCount() {
+        if (!db) return;
+        db.ref('downloads/taproune').on('value', (snapshot) => {
+            var count = snapshot.numChildren();
+            var span = document.getElementById('downloadCount');
+            if (!span) return;
+            if (count === 0) {
+                span.textContent = '';
+                return;
+            }
+            var lastTwo = count % 100;
+            var last = count % 10;
+            var word;
+            if (lastTwo >= 11 && lastTwo <= 14) word = 'человек';
+            else if (last === 1) word = 'человек';
+            else if (last >= 2 && last <= 4) word = 'человека';
+            else word = 'человек';
+            if (count === 1) {
+                span.textContent = 'Скачал ' + count + ' ' + word;
+            } else {
+                span.textContent = 'Скачало ' + count + ' ' + word;
+            }
+        });
+    }
+
+    // ===== КОММЕНТАРИИ =====
     function loadComments() {
         if (!db) {
             document.getElementById('commentsList').innerHTML = '<p class="empty">Комментарии скоро появятся!</p>';
@@ -785,7 +824,10 @@
         }
     }
 
-    window.addEventListener('load', loadComments);
+    window.addEventListener('load', function() {
+        loadComments();
+        loadDownloadCount();
+    });
     </script>
 </body>
 </html>
