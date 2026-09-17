@@ -94,6 +94,35 @@
     </style>
 </head>
 <body>
+    <!-- Anti-theft protection: Created by Poroloshka, 2026. Original source: porolowka.github.io -->
+    <!-- Unauthorized copying is prohibited. Author: Poroloshka. All rights reserved. -->
+    <div style="display:none" data-author="porolowka" data-source="original" data-date="2026-09-17"></div>
+
+    <script>
+    (function() {
+        var allowedHosts = ['porolowka.github.io', 'localhost', '127.0.0.1'];
+        var currentHost = window.location.hostname;
+        var isAllowed = false;
+        for (var i = 0; i < allowedHosts.length; i++) {
+            if (currentHost === allowedHosts[i] || currentHost.endsWith('.' + allowedHosts[i])) {
+                isAllowed = true;
+                break;
+            }
+        }
+        if (!isAllowed) {
+            document.body.innerHTML =
+                '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:#1a0000;z-index:99999;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;">' +
+                    '<div style="max-width:500px;">' +
+                        '<h1 style="color:#d94a4a;font-size:36px;">&#9888; Этот сайт украден</h1>' +
+                        '<p style="color:#ff9999;font-size:18px;">Оригинал: <a href="https://porolowka.github.io" style="color:#FFD700;">porolowka.github.io</a></p>' +
+                        '<p style="color:#ff9999;font-size:14px;margin-top:30px;">&copy; Poroloshka, 2026</p>' +
+                    '</div>' +
+                '</div>';
+            throw new Error('Unauthorized domain.');
+        }
+    })();
+    </script>
+
     <header>
         <h1>Poroloshka</h1>
         <p>Мои игры — скачай и играй!</p>
@@ -102,9 +131,9 @@
     <div class="games">
         <div class="game-card">
             <span class="badge">Бесплатно</span>
-            <h2>Кликер</h2>
+            <h2>Taproune</h2>
             <p>Кликай, зарабатывай очки, покупай улучшения, играй в мини-игру. Есть инструктор, который всё объяснит.</p>
-            <a href="cliker.html" class="btn">Скачать</a>
+            <a href="taproune.html" class="btn">Скачать</a>
         </div>
     </div>
 
