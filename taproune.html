@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кликер — Poroloshka</title>
+    <title>Taproune — Poroloshka</title>
     <style>
         body {
             margin: 0;
@@ -39,9 +39,10 @@
             margin: 0 auto 20px;
         }
         .cover h1 {
-            font-size: 56px;
+            font-size: 72px;
             color: #FFD700;
             margin: 0 0 15px;
+            letter-spacing: 2px;
         }
         .cover p {
             font-size: 18px;
@@ -193,6 +194,36 @@
             color: #555;
             font-style: italic;
             padding: 40px;
+        }
+
+        /* Блокировка при краже */
+        .stolen-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #1a0000;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+        .stolen-overlay .stolen-content {
+            max-width: 500px;
+        }
+        .stolen-overlay h1 {
+            color: #d94a4a;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        .stolen-overlay p {
+            color: #ff9999;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        .stolen-overlay a {
+            color: #FFD700;
+            word-break: break-all;
         }
 
         /* Комментарии */
@@ -378,13 +409,17 @@
     </style>
 </head>
 <body>
+    <!-- Anti-theft protection: Created by Poroloshka, 2026. Original source: porolowka.github.io -->
+    <!-- Unauthorized copying is prohibited. Author: Poroloshka. All rights reserved. -->
+    <div style="display:none" data-author="porolowka" data-source="original" data-date="2026-09-17"></div>
+
     <div class="nav">
         <a href="index.html">&larr; Все игры</a>
     </div>
 
     <div class="cover">
-        <img src="Clicker-cover.png" alt="Кликер">
-        <h1>Кликер</h1>
+        <img src="Taproune-cover.png" alt="Taproune">
+        <h1>Taproune</h1>
         <p>Кликай, зарабатывай очки, прокачивай улучшения, играй в мини-игру с кроликом и морковками. Инструктор поможет освоиться!</p>
     </div>
 
@@ -396,7 +431,7 @@
 
     <div class="section">
         <h2>Об игре</h2>
-        <p>Кликер — это игра, где ты зарабатываешь очки кликами. Покупай улучшения в магазине, запускай автокликер, чтобы очки копились сами, и развлекайся в мини-игре, где кролик скачет за морковками. Жёлтый инструктор в углу экрана подскажет, что делать.</p>
+        <p>Taproune — это кликер, где ты зарабатываешь очки кликами. Покупай улучшения в магазине, запускай автокликер, чтобы очки копились сами, и развлекайся в мини-игре, где кролик скачет за морковками. Жёлтый инструктор в углу экрана подскажет, что делать.</p>
     </div>
 
     <div class="screenshots">
@@ -440,9 +475,9 @@
         <div class="version-item">
             <div class="version-info">
                 <h3><span class="version-badge alpha">Alpha</span> v0.1 — Ранний доступ</h3>
-                <p>Первая публичная версия. Скачайте, распакуйте и запускайте clicker.exe.</p>
+                <p>Первая публичная версия. Скачайте, распакуйте и запускайте taproune.exe.</p>
             </div>
-            <a href="https://github.com/porolowka/porolowka.github.io/raw/main/Кликер.zip" class="download-btn">Скачать</a>
+            <a href="https://github.com/porolowka/porolowka.github.io/raw/main/v0.1-alpha-rd" class="download-btn">Скачать</a>
         </div>
     </div>
 
@@ -476,6 +511,36 @@
     <footer>
         Poroloshka &copy; 2026
     </footer>
+
+    <script>
+    // ===== ЗАЩИТА ОТ КОПИРОВАНИЯ =====
+    (function() {
+        var allowedHosts = ['porolowka.github.io', 'localhost', '127.0.0.1'];
+        var currentHost = window.location.hostname;
+
+        var isAllowed = false;
+        for (var i = 0; i < allowedHosts.length; i++) {
+            if (currentHost === allowedHosts[i] || currentHost.endsWith('.' + allowedHosts[i])) {
+                isAllowed = true;
+                break;
+            }
+        }
+
+        if (!isAllowed) {
+            document.body.innerHTML =
+                '<div class="stolen-overlay">' +
+                    '<div class="stolen-content">' +
+                        '<h1>&#9888; Этот сайт украден</h1>' +
+                        '<p>Данная страница является нелегальной копией оригинального сайта.</p>' +
+                        '<p>Оригинал находится по адресу:</p>' +
+                        '<p><a href="https://porolowka.github.io/taproune.html">porolowka.github.io</a></p>' +
+                        '<p style="margin-top: 30px; font-size: 14px;">&copy; Poroloshka, 2026. Все права защищены.</p>' +
+                    '</div>' +
+                '</div>';
+            throw new Error('Unauthorized domain. This content is stolen.');
+        }
+    })();
+    </script>
 
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
